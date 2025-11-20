@@ -1,0 +1,243 @@
+---
+title: "Assignment 2: Initial Findings Memo"
+author: "Olivia Whitlock"
+format: 
+  pdf:
+    documentclass: article
+    fontfamily: Inter
+    fontsize: 11pt
+    margin-left: 1in
+    margin-right: 1in
+    margin-top: 1in
+    margin-bottom: 1in
+editor: visual
+---
+
+# Assignment 2: "The First Look"
+
+## Conceptual Focus
+
+This assignment covers **Chapter 13: Descriptive Statistics and Visualization**. Last week, we finished our "mise en place." Now, we need to find the "story" in the data. This is where we find the "wow" insights for the client. As your slides note, we will use two toolkits: \* **Descriptive Statistics:** Summarizing data with precision (e.g., `summary()`, `count()`). \* **Data Visualization:** Summarizing data with intuitive pictures (e.g., `ggplot2`).
+
+------------------------------------------------------------------------
+
+# Initial Insights Memo
+
+**To:** Alex Chen (Director of Insights)
+
+**From:** Olivia Whitlock
+
+**Subject:** Initial Insights for 2025 Digital Landscape Brief
+
+## *Section 1: Sample Snapshot*
+
+**\[Write your summary of the sample here. Describe the political party and racial/ethnic breakdown of the sample in plain English, referencing the tables below. What does this tell you about our sample?\]**
+
+Most of our sample is split between Democrats and Republicans, with only a few identifying as Independent/Other. For race/ethnicity, the sample is mostly white non-Hispanic people, with smaller numbers in all of the other groups. I think this clearly shows our sample isn't very diverse.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-desc-cat"
+# This chunk runs the code from the appendix 
+# and displays ONLY the output tables.
+```
+
+## Section 2: Potential Client-Facing Insights
+
+**\[Write your 2-3 sentence "active title" or caption for the histogram below. Answer the write-up question: Is the data normally distributed, or skewed? What does this tell us about the "average" social media user?\]**
+
+The histogram shows that platform usage is skewed. Most people use one or two platforms, while very few use all four. This tells us that the "average" social media use is active, but isn't on every app.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-viz-hist"
+# This chunk displays the histogram.
+```
+
+**\[Write your 2-3 sentence caption for the bar chart below. What's the simple, client-facing takeaway?\]**
+
+The bar chart shows that Democrats and Republicans make up most of the sample. Independent/Other is a small group, so comparisons involving them shouldn't be read too much into.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-viz-bar"
+# This chunk displays the bar chart.
+```
+
+**\[Write your 2-3 sentence caption for the boxplot below. Answer the write-up question: Based *only on the visual*, do platform use habits appear to differ by political affiliation?\]**
+
+The boxplot shows that platform usage looks quite similar across the political groups. There really isn't a stark difference in how many platforms each group uses.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-viz-boxplot"
+# This chunk displays the boxplot.
+```
+
+**\[Write your 2-3 sentence caption for the stacked bar chart below. Answer the write-up question: What does this chart suggest about the user base of TikTok? Why would this be important for our non-profit client to know?\]**
+
+The stacked bar chart shows that TikTok use isn’t evenly spread across all groups. Some groups use TikTok more often than others. For a nonprofit, this matters because it shows which communities they’re more likely to reach on TikTok and which groups might need a different platform to be reached more effectively.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-viz-stackedbar"
+# This chunk displays the stacked bar chart.
+```
+
+**\[Write your 2-3 sentence caption for the faceted histogram below. How does Facebook "purpose" seem to differ across the three political groups?\]**
+
+The faceted histogram shows that Facebook's “purpose” looks different depending on someone’s political affiliation. One group tends to use Facebook for certain reasons, while others use it for different reasons. This suggests that different political groups may be shown different content or having different experiences on the platform.
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-viz-facet"
+# This chunk displays the faceted histogram.
+```
+
+\newpage
+
+# Appendix: R Code and Commentary
+
+## 1. Setup
+
+**\[Add your commentary. What are we loading here?\]**
+
+We are loading the library(tidyverse) package to organize the messy data and make it more streamlined. Then we are loading the dataset we finished in the last assignment.
+
+```{r}
+#| label: "chunk-setup"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(tidyverse)
+load("./w144_wrangled.RData") # Load data from Assignment 1
+```
+
+## 2. Descriptive Statistics (Categorical)
+
+**\[Add your commentary. Explain what `count()` and `mutate(percent = ...)` are doing. What do these tables tell us about our sample?\]**
+
+Count() is just counting how many people fall into each category. Mutate(percent = …) turns those counts into percentages so it’s easier to compare groups. Together, they give us a look at who is actually in our sample.
+
+```{r}
+#| label: "chunk-desc-cat"
+#| echo: true
+
+# Get frequencies for party_simple
+# Hint: Use count() on the 'party_simple' variable, then use mutate() to calculate the percent.
+w144_wrangled %>% 
+  count(party_simple) %>%
+  mutate(percent = n / sum(n))
+
+# Get frequencies for f_race
+w144_wrangled %>% 
+  count(f_racethnmod) %>%
+  mutate(percent = n / sum(n))
+# Hint: Use count() on the 'f_race' variable, then use mutate() to calculate the percent.
+```
+
+## 3. Descriptive Statistics (Numeric)
+
+**\[Add your commentary. What key numbers does `summary()` give us? What is the difference between the Mean and the Median, and why do we care?\]**
+
+Summary() gives us key numbers — minimum, maximum, mean and median. The mean is the average and the median is the middle value. We care because when data is skewed, the mean can be misleading, but the median still shows the “average” person.
+
+```{r}
+#| label: "chunk-desc-num"
+#| echo: true
+
+# Get summary for platform_count
+summary(w144_wrangled$platform_count)
+# Hint: Use summary() on the 'platform_count' variable.
+
+# Get summary for fb_purpose_score
+summary(w144_wrangled$fb_purpose_score)
+# Hint: Use summary() on the 'fb_purpose_score' variable.
+```
+
+## 4. Visualization (Single Numeric)
+
+**\[Add your commentary. Explain the `ggplot` code. What is the `aes`? What is the `geom`? This is the "Histogram" from Slide 15.\]**
+
+We’re using ggplot to make a histogram of platform_count. The aes() tells R what we are wanting to plot and geom_histogram() is what creates the actual bars. Altogether, this shows us how many social media platforms people tend to use in our sample.
+
+```{r}
+#| label: "chunk-viz-hist"
+#| echo: true
+
+# Create a histogram of platform_count
+ggplot(w144_wrangled, aes(x = platform_count)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  labs(title = "Distribution of Platform Count", x = "Number of Platforms Used", y = "Count")
+```
+
+## 5. Visualization (Single Categorical)
+
+\[Add your commentary. This is the "Bar Chart" from Slide 15.\]
+
+The bar chart shows how many people fall into each political group. Aes() tells R which variable to use and geom_bar() builds the bars.
+
+```{r}
+#| label: "chunk-viz-bar"
+#| echo: true
+
+# Create a bar chart of party_simple
+ggplot(w144_wrangled, aes(x = party_simple)) +
+  geom_bar(fill = "steelblue") +
+  labs(title = "Distribution of Political Affiliation", x = "Party", y = "Count")
+```
+
+## 6. Visualization (Numeric by Categorical)
+
+**\[Add your commentary. This is the "Boxplot" from Slide 15. What story does it tell?\]**
+
+The boxplot compares platform usage across political groups. It helps us see whether any groups use more or fewer platforms. It tells us that the numbers are quite similar across the board.
+
+```{r}
+#| label: "chunk-viz-boxplot"
+#| echo: true
+
+# Create a boxplot of platform_count by party_simple
+ggplot(w144_wrangled, aes(x = party_simple, y = platform_count)) +
+  geom_boxplot() +
+  labs(title = "Platform Use by Political Party", x = "Party", y = "Number of Platforms")
+```
+
+## 7. Visualization (Categorical by Categorical)
+
+**\[Add your commentary. What does `position = "fill"` do? This is the "Stacked Bar Chart" from Slide 15.\] \[Pedagogical Note: `as.factor()` is used on the `fill` variable because it's a number (0/1) that we want ggplot to treat as a *category*, not as a continuous number. This is a common and important trick.\]**
+
+Position = "fill" makes every bar the same height so you can compare proportions, showing what share of each racial/ethnic group uses TikTok. We use as.factor() so R treats the TikTok variable (0 = no, 1 = yes) as categories instead of numbers.
+
+```{r}
+#| label: "chunk-viz-stackedbar"
+#| echo: true
+
+# Create a filled stacked bar chart of TikTok use by f_race
+# We must filter out NA values for a clean plot
+w144_wrangled %>%
+  filter(!is.na(f_racethnmod) & !is.na(uses_tiktok)) %>%
+  ggplot(aes(x = f_racethnmod, fill = as.factor(uses_tiktok))) +
+  geom_bar(position = "fill") +
+  labs(title = "Proportion of TikTok Use by Race/Ethnicity", x = "Race/Ethnicity", y = "Proportion", fill = "Uses TikTok")
+```
+
+## 8. Visualization (Small Multiples)
+
+**\[Add your commentary. What is `facet_wrap()` doing here? Why is this more powerful than just one histogram? This is the "Small Multiples" concept from Slide 15.\]**
+
+Facet_wrap() makes a separate graph for each political group. It’s more helpful than just one big plot because we can compare groups side-by-side without anything overlapping.
+
+```{r}
+#| label: "chunk-viz-facet"
+#| echo: true
+
+# Create faceted histograms of fb_purpose_score by party_simple
+w144_wrangled %>%
+  filter(!is.na(fb_purpose_score) & !is.na(party_simple)) %>%
+  ggplot(aes(x = fb_purpose_score)) +
+  geom_histogram(binwidth = 1) +
+  facet_wrap(~ party_simple) +
+  labs(title = "Facebook 'Purpose' Score by Party", x = "FB Purpose Score", y = "Count")
+```
