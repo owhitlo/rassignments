@@ -1,0 +1,211 @@
+---
+title: "Assignment 3: Statistical Findings Memo"
+author: "[Olivia Whitlock]"
+format: 
+  pdf:
+    documentclass: article
+    fontfamily: Inter
+    fontsize: 11pt
+    margin-left: 1in
+    margin-right: 1in
+    margin-top: 1in
+    margin-bottom: 1in
+editor: visual
+---
+
+# Assignment 3: "The Leap"
+
+## Conceptual Focus
+
+This assignment covers **Chapter 14: Making Inferences**. In Week 13, we *described* our sample (e.g., "In our sample, Group A used more platforms"). Now, we must *verify* these findings. As your slides state, this is the "leap of faith" from our sample to the population.
+
+Our core question is: "Is the difference I see in my sample 'real'... or could it just be a fluke due to random chance?" We will use **Hypothesis Testing** (and p-values) to answer this, and we'll use the correct test for each job based on your **PowerPoint (Slide 23)**.
+
+------------------------------------------------------------------------
+
+# Statistical Findings Memo
+
+**To:** Alex Chen (Director of Insights)
+
+**From:** \[Olivia Whitlock\]
+
+**Subject:** Statistical Verification for 2025 Digital Landscape Brief
+
+This memo formally tests the key patterns identified in our descriptive analysis. The goal is to verify that these findings are statistically significant and not just a fluke of our sample before we present them to the client. All tests use an alpha level of $\alpha = .05$.
+
+## RQ 1: Association (TikTok & Politics)
+
+**Research Question:** Is there a significant *association* between political party (`party_simple`) and using TikTok (`uses_tiktok`)?
+
+**Hypotheses:** \* **H0 (Null):** There is no association between `party_simple` and `uses_tiktok` in the population. \* **HA (Alternative):** There is an association between `party_simple` and `uses_tiktok` in the population.
+
+**Results:** \[The `chisq.test` output will appear below.\]
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-test-chisq"
+# This chunk displays the Chi-Square test output
+```
+
+**Decision: \[Based on the p-value (which is...?), do you "Reject H0" or "Fail to Reject H0"?\]**
+
+The p-value was very small, so we reject the null meaning means the results are not random.
+
+**Conclusion: \[Write 1-2 sentences in plain English for the client. Is there a link between politics and TikTok use? What does the data show?\]**
+
+There is a link between politics and TikTok use. The data shows that TikTok usage isn’t evenly spread across political groups, and some groups use it more than others.
+
+------------------------------------------------------------------------
+
+## RQ 2: Difference (Device Type)
+
+**Research Question:** Is there a significant *difference* in social media adoption (`platform_count`) between respondents who took the survey on a PC versus a Smartphone?
+
+**Hypotheses:** \* **H0 (Null):** The mean `platform_count` is the same for PC and Smartphone users in the population. \* **HA (Alternative):** The mean `platform_count` is different for PC and Smartphone users in the population.
+
+**Results:** \[The `t.test` output will appear below.\]
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-test-ttest"
+# This chunk displays the t-test output
+```
+
+**Decision: \[Based on the p-value, do you "Reject H0" or "Fail to Reject H0"?\]**
+
+The p-value is small, so we reject the null. 
+
+**Conclusion: \[Write 1-2 sentences for the client. Does device type seem to relate to how many platforms a person uses? What are the mean scores for each group (see `mean in group 1` and `mean in group 2`)?\]**
+
+Yes, the device type seems to be related to how many platforms someone uses. Smartphone users had a higher average than PC users, suggesting smartphone users are on social media platforms more overall.
+
+------------------------------------------------------------------------
+
+## RQ 3: Difference (Party & Platform Count)
+
+**Research Question:** Is there a significant *difference* in the mean number of platforms used (`platform_count`) across our three `party_simple` groups?
+
+**Hypotheses:** \* **H0 (Null):** The mean `platform_count` is the same for all three `party_simple` groups in the population. \* **HA (Alternative):** At least one group's mean `platform_count` is different from the others.
+
+**Results (ANOVA):** \[The `aov` output will appear below.\]
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-test-anova"
+# This chunk displays the ANOVA test output
+```
+
+**Results (Post-Hoc Test):** \[The `TukeyHSD` output will appear below.\]
+
+```{r}
+#| echo: false
+#| ref.label: "chunk-test-tukey"
+# This chunk displays the TukeyHSD test output
+```
+
+**Decision: \[Was the overall ANOVA significant (look at the `Pr(>F)` value)? Based on the TukeyHSD `p adj` values, which *specific pairs* are significantly different (i.e., have p adj \< .05)?\]**
+
+Yes, the overall ANOVA was significant. Based on the Tukey test, the only group difference that was actually significant was Democrats vs. Republicans. The other pairs weren’t statistically different.
+
+**Conclusion: \[Write 1-2 sentences for the client. This is the "Dumb ANOVA" and "Smart Post-Hoc" from your slides. Does political affiliation relate to the number of platforms people use? If so, who uses more or fewer platforms?\]**
+
+There is a relationship between political affiliation and how many platforms people use, but it mainly shows up between Democrats and Republicans. Democrats tend to use slightly more platforms than Republicans, while Independents aren't much different from either group.
+
+------------------------------------------------------------------------
+
+## Final Discussion
+
+**\[Look at your results from all three tests. What is the "big picture" story you are starting to see? What is the most *meaningful* or *important* finding you would recommend we lead with in the client presentation, and why?\]**
+
+**\[Pedagogical Prompt: In your answer, explicitly consider the concept of "Significance vs. Meaningfulness" from your PowerPoint (Slide 22). Is your most *statistically significant* finding (lowest p-value) also your most *practically important* finding for the client?\]**
+
+The “big picture” across all three tests is that politics and tech habits are connected. The “strongest” result seems to come from the device type test, and the p-value was small, so that isn’t random. But even though those results were the strongest, I personally think party involvement and social media usage is more meaningful to a client and would likely matter more for how they plan their outreach.
+
+Regarding “significance vs. meaningfulness,” the result with the lowest p-value isn’t automatically the most important. The device difference does have strong stats, but the party/social media pattern is more useful because it can realistically help someone decide how to reach certain people on certain platforms. For platforms in general, the device type doesn’t really change that.
+
+\newpage
+
+# Appendix: R Code and Commentary
+
+## 1. Setup
+
+**\[Add your commentary.\]**
+
+We are loading the library(tidyverse) package to organize the messy data and make it more streamlined. Then we are loading the dataset we finished in the last assignment.
+
+```{r}
+#| label: "chunk-setup"
+#| echo: true
+#| message: false
+#| warning: false
+
+library(tidyverse)
+load("w144_wrangled.RData") # Load data from Assignment 1
+```
+
+## 2. RQ 1: Chi-Square Test
+
+**\[Add your commentary. Why is `chisq.test` the right test for RQ 1? (Hint: Look at your PowerPoint, Slide 23. What are the *variable types* for `party_simple` and `uses_tiktok`?)\]**
+
+chisq.test is the right test because both party_simple and uses_tiktok are categorical variables, and the Chi-Square test is what you want to use when you want to see whether two categorical variables are related.
+
+```{r}
+#| label: "chunk-test-chisq"
+#| echo: true
+
+# Create a contingency table
+# Skeleton: Use the table() function on your two categorical variables
+tiktok_party_table <- table(w144_wrangled$party_simple, w144_wrangled$uses_tiktok) 
+
+# Run the test
+# Skeleton: Use the chisq.test() function on your table
+chisq.test(tiktok_party_table)
+```
+
+## 3. RQ 2: Independent Samples t-test
+
+**\[Add your commentary. Why is `t.test` the right test for RQ 2? (Hint: Slide 23. What are the variable types? How many groups are we comparing?)\]**
+
+t.test is the right test because we’re comparing the mean of a variable (platform_count) across two groups (PC and smartphone users). Since it’s one number being compared between two categories, the t-test makes sense.
+
+```{r}
+#| label: "chunk-test-ttest"
+#| echo: true
+
+# Filter the data to include only PC (1) and Smartphone (2) users
+device_data <- w144_wrangled %>%
+  filter(device_type_w144 == 1 | device_type_w144 == 2)
+
+# Run the t-test
+# Skeleton: Use t.test(numeric_var ~ categorical_var, data = ...)
+t.test(platform_count ~ device_type_w144, data = device_data) 
+```
+
+## 4. RQ 3: ANOVA & TukeyHSD
+
+**\[Add your commentary. Why is `aov` the right test for RQ 3? (Hint: Slide 23. How is this different from RQ 2?) What is the `TukeyHSD` test for?\]**
+
+Aov is the right test here because we’re comparing one number (platform_count) across three different party groups, not just two like in the t-test. ANOVA checks to see if any of the groups are different. Then TukeyHSD shows exactly which groups are different from one another 
+
+```{r}
+#| label: "chunk-test-anova"
+#| echo: true
+#| results: "hide" 
+# Hide results here so they can be shown by the next chunk
+
+# Run the ANOVA
+# Skeleton: Use aov(numeric_var ~ categorical_var, data = ...)
+anova_model <- aov(platform_count ~ party_simple, data = w144_wrangled) 
+
+# Get the summary table
+summary(anova_model)
+```
+
+```{r}
+#| label: "chunk-test-tukey"
+#| echo: true
+
+# Run the Post-Hoc Test
+# Skeleton: Use TukeyHSD() on your anova_model
+TukeyHSD(anova_model)
+```
