@@ -49,11 +49,11 @@ This memo formally tests the key patterns identified in our descriptive analysis
 
 **Decision: \[Based on the p-value (which is...?), do you "Reject H0" or "Fail to Reject H0"?\]**
 
-The p-value was very small, so we reject the null meaning means the results are not random.
+The p-value (1.23e-06) was small, so we reject the null.
 
 **Conclusion: \[Write 1-2 sentences in plain English for the client. Is there a link between politics and TikTok use? What does the data show?\]**
 
-There is a link between politics and TikTok use. The data shows that TikTok usage isn’t evenly spread across political groups, and some groups use it more than others.
+Yes, there is a link between politics and TikTok use. The data shows that TikTok usage isn’t evenly spread across political groups, and some groups use it more than others.
 
 ------------------------------------------------------------------------
 
@@ -73,11 +73,11 @@ There is a link between politics and TikTok use. The data shows that TikTok usag
 
 **Decision: \[Based on the p-value, do you "Reject H0" or "Fail to Reject H0"?\]**
 
-The p-value is small, so we reject the null. 
+The p-value is again small, so we reject the null. 
 
 **Conclusion: \[Write 1-2 sentences for the client. Does device type seem to relate to how many platforms a person uses? What are the mean scores for each group (see `mean in group 1` and `mean in group 2`)?\]**
 
-Yes, the device type seems to be related to how many platforms someone uses. Smartphone users had a higher average than PC users, suggesting smartphone users are on social media platforms more overall.
+Yes, the device type seems to be related to how many platforms someone uses. With the scores, smartphone users had a higher average than PC users, suggesting smartphone users are on social media platforms more overall.
 
 ------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ Yes, the device type seems to be related to how many platforms someone uses. Sma
 
 **Decision: \[Was the overall ANOVA significant (look at the `Pr(>F)` value)? Based on the TukeyHSD `p adj` values, which *specific pairs* are significantly different (i.e., have p adj \< .05)?\]**
 
-Yes, the overall ANOVA was significant. Based on the Tukey test, the only group difference that was actually significant was Democrats vs. Republicans. The other pairs weren’t statistically different.
+Yes, the overall ANOVA was significant. Based on the Tukey, the only group difference that was actually significant was Democrats and Republicans. The other pairs weren’t statistically different I believe.
 
 **Conclusion: \[Write 1-2 sentences for the client. This is the "Dumb ANOVA" and "Smart Post-Hoc" from your slides. Does political affiliation relate to the number of platforms people use? If so, who uses more or fewer platforms?\]**
 
@@ -121,7 +121,7 @@ There is a relationship between political affiliation and how many platforms peo
 
 The “big picture” across all three tests is that politics and tech habits are connected. The “strongest” result seems to come from the device type test, and the p-value was small, so that isn’t random. But even though those results were the strongest, I personally think party involvement and social media usage is more meaningful to a client and would likely matter more for how they plan their outreach.
 
-Regarding “significance vs. meaningfulness,” the result with the lowest p-value isn’t automatically the most important. The device difference does have strong stats, but the party/social media pattern is more useful because it can realistically help someone decide how to reach certain people on certain platforms. For platforms in general, the device type doesn’t really change that.
+Regarding “significance vs. meaningfulness,” the result with the lowest p-value isn’t automatically the most important. The device difference does have strong stats, but the party/social media pattern is more useful, again, because it can realistically help someone decide how to reach certain people on certain platforms. For platforms in general, the device type doesn’t really change that.
 
 \newpage
 
@@ -166,7 +166,7 @@ chisq.test(tiktok_party_table)
 
 **\[Add your commentary. Why is `t.test` the right test for RQ 2? (Hint: Slide 23. What are the variable types? How many groups are we comparing?)\]**
 
-t.test is the right test because we’re comparing the mean of a variable (platform_count) across two groups (PC and smartphone users). Since it’s one number being compared between two categories, the t-test makes sense.
+T.test is the right test because we’re comparing the mean of a variable (platform_count) across two groups (PC and smartphone users). Since it’s one number being compared between two categories, the t-test makes sense.
 
 ```{r}
 #| label: "chunk-test-ttest"
